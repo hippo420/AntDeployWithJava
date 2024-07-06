@@ -1,0 +1,26 @@
+2024-07-07 00:02:39 INFO  antJob1Logger:72 - Build started
+2024-07-07 00:02:39 INFO  antJob1Logger:96 - Task started: property
+2024-07-07 00:02:39 INFO  antJob1Logger:101 - Task finished: property
+2024-07-07 00:02:39 INFO  antJob1Logger:96 - Task started: property
+2024-07-07 00:02:39 INFO  antJob1Logger:101 - Task finished: property
+2024-07-07 00:02:39 INFO  antJob1Logger:96 - Task started: property
+2024-07-07 00:02:39 INFO  antJob1Logger:101 - Task finished: property
+2024-07-07 00:02:39 INFO  antJob1Logger:96 - Task started: property
+2024-07-07 00:02:39 INFO  antJob1Logger:101 - Task finished: property
+2024-07-07 00:02:39 INFO  antJob1Logger:96 - Task started: property
+2024-07-07 00:02:39 INFO  antJob1Logger:101 - Task finished: property
+2024-07-07 00:02:39 INFO  antJob1Logger:96 - Task started: property
+2024-07-07 00:02:39 INFO  antJob1Logger:101 - Task finished: property
+2024-07-07 00:02:39 INFO  antJob1Logger:96 - Task started: property
+2024-07-07 00:02:39 INFO  antJob1Logger:101 - Task finished: property
+2024-07-07 00:02:39 INFO  antJob1Logger:96 - Task started: taskdef
+2024-07-07 00:02:39 INFO  antJob1Logger:101 - Task finished: taskdef
+2024-07-07 00:02:39 INFO  antJob1Logger:96 - Task started: taskdef
+2024-07-07 00:02:39 WARN  antJob1Logger:111 - Trying to override old definition of datatype scp
+2024-07-07 00:02:39 INFO  antJob1Logger:101 - Task finished: taskdef
+2024-07-07 00:02:39 INFO  antJob1Logger:86 - Target started: main
+2024-07-07 00:02:39 INFO  antJob1Logger:96 - Task started: echo
+2024-07-07 00:02:39 WARN  antJob1Logger:111 - Hello, Ant-Contrib!
+2024-07-07 00:02:39 INFO  antJob1Logger:101 - Task finished: echo
+2024-07-07 00:02:39 INFO  antJob1Logger:91 - Target finished: main
+2024-07-07 00:02:39 INFO  antJob1Logger:78 - Build finished successfully

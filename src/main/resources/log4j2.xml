@@ -23,6 +23,24 @@
         </Policies>
     </RollingFile>
 
+    <RollingFile name="Job3RollingFile"
+                 fileName="D:\DEV\AntDeploy\src\main\resources\log\job3.log"
+                 filePattern="D:\DEV\AntDeploy\src\main\resources\log\job3_%d{yyyy-MM-dd}.log">
+        <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+        <Policies>
+            <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+        </Policies>
+    </RollingFile>
+
+    <RollingFile name="Job4RollingFile"
+                 fileName="D:\DEV\AntDeploy\src\main\resources\log\job4.log"
+                 filePattern="D:\DEV\AntDeploy\src\main\resources\log\job4_%d{yyyy-MM-dd}.log">
+        <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+        <Policies>
+            <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+        </Policies>
+    </RollingFile>
+
 </Appenders>
 <Loggers>
     <!-- Root logger -->
@@ -32,13 +50,23 @@
     </Root>
 
     <!-- Logger for Job1 -->
-    <Logger name="antJob1Logger" level="info" additivity="false">
+    <Logger name="app1" level="info" additivity="false">
         <AppenderRef ref="Job1RollingFile"/> <!-- Reference to Job1 RollingFile appender -->
     </Logger>
 
     <!-- Logger for Job2 -->
-    <Logger name="antJob2Logger" level="info" additivity="false">
+    <Logger name="app2" level="info" additivity="false">
         <AppenderRef ref="Job2RollingFile"/> <!-- Reference to Job2 RollingFile appender -->
+    </Logger>
+
+    <!-- Logger for Job3 -->
+    <Logger name="antJob3Logger" level="info" additivity="false">
+        <AppenderRef ref="Job3RollingFile"/> <!-- Reference to Job3 RollingFile appender -->
+    </Logger>
+
+    <!-- Logger for Job4 -->
+    <Logger name="antJob4Logger" level="info" additivity="false">
+        <AppenderRef ref="Job4RollingFile"/> <!-- Reference to Job4 RollingFile appender -->
     </Logger>
 </Loggers>
 </Configuration>

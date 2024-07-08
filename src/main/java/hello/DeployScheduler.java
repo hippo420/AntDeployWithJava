@@ -18,26 +18,27 @@ import java.net.URLClassLoader;
 
 public class DeployScheduler implements Job {
     private static final Logger logger = LogManager.getLogger(DeployScheduler.class);
+
+
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         deployProjects(jobExecutionContext);
     }
     void deployProjects(JobExecutionContext jobExecutionContext){
         // Ant 프로젝트 설정
-        File buildFile = new File("D:\\DEV\\AntDeploy\\src\\main\\resources\\build\\build.xml");
+        File buildFile = new File(jobExecutionContext.getJobDetail().getJobDataMap().getString("buildFilePath"));
         Project project = new Project();
-        //project.setUserProperty("D:\\DEV\\changet\\src\\main\\resources\\lib\\ant-1.10.12.jar", buildFile.getAbsolutePath());
-        project.setUserProperty("ant.file", buildFile.getAbsolutePath());
+         project.setUserProperty("ant.file", buildFile.getAbsolutePath());
 
 
         // Logger 설정 - 작업별로 다른 로거 사용
         String jobName = jobExecutionContext.getJobDetail().getKey().getName();
         LoggerContext loggerContext = (LoggerContext) LogManager.getContext(false);
         Configuration config = loggerContext.getConfiguration();
-        LoggerConfig loggerConfig = config.getLoggerConfig(jobName + "Logger");
+        LoggerConfig loggerConfig = config.getLoggerConfig(jobName);
         Configurator.setLevel(loggerConfig.getName(), org.apache.logging.log4j.Level.INFO);
 
-        project.addBuildListener(new Log4jBuildListener(jobName + "Logger"));
+        project.addBuildListener(new Log4jBuildListener(jobName));
 
         logger.info("Ant build started for " + jobName);
 
@@ -57,6 +58,10 @@ public class DeployScheduler implements Job {
         } catch (Exception e) {
             project.fireBuildFinished(e);
             logger.error("Ant build failed", e);
+        }finally{
+            // 자원 해제
+            loggerContext.close();
+            project = null;
         }
     }
 

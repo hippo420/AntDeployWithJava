@@ -5,22 +5,35 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public  class QuartzSchedulerGUI extends JFrame {
 
     public static SchedulerFactory schedulerFactory = null;
     public static Scheduler scheduler = null;
 
-    private static JTextArea logTextArea1;
-    private static JTextArea logTextArea2;
-    private static JTextArea logTextArea3;
-    private static JTextArea logTextArea4;
-    private static JLabel statusLabel1;
-    private static JLabel statusLabel2;
-    private static JLabel statusLabel3;
-    private static JLabel statusLabel4;
+    private JTextArea logTextArea1;
+    private JTextArea logTextArea2;
+    private JTextArea logTextArea3;
+    private JTextArea logTextArea4;
+
+
+    private JLabel statusLabel1;
+    private JLabel statusLabel2;
+    private JLabel statusLabel3;
+    private JLabel statusLabel4;
     private JButton startButton;
     private JButton stopButton;
+
+    private JButton deployButton1;
+    private JButton deployButton2;
+    private JButton deployButton3;
+    private JButton deployButton4;
+
+
     private static JPanel panel;
 
     public QuartzSchedulerGUI() {
@@ -45,15 +58,29 @@ public  class QuartzSchedulerGUI extends JFrame {
 
         startButton = new JButton("배포스케쥴러 시작");
         stopButton = new JButton("배포스케쥴러 종료");
+        deployButton1 = new JButton("app1 배포");
+        deployButton2 = new JButton("app2 배포");
+        deployButton3 = new JButton("app3 배포");
+        deployButton4 = new JButton("app4 배포");
 
         startButton.addActionListener(e -> startScheduler());
         stopButton.addActionListener(e -> stopScheduler());
+        deployButton1.addActionListener(e -> deployStart(1));
+        deployButton2.addActionListener(e -> deployStart(2));
+        deployButton3.addActionListener(e -> deployStart(3));
+        deployButton4.addActionListener(e -> deployStart(4));
+
 
         panel.add(startButton);
         panel.add(stopButton);
+        panel.add(deployButton1);
+        panel.add(deployButton2);
+        panel.add(deployButton3);
+        panel.add(deployButton4);
         add(panel,BorderLayout.SOUTH);
 
         stopButton.setEnabled(false);
+
     }
     private JTextArea createLogTextArea(String jobName) {
         JTextArea textArea = new JTextArea();
@@ -123,6 +150,10 @@ public  class QuartzSchedulerGUI extends JFrame {
 
             //log.info("Scheduler started.");
             startButton.setEnabled(false);
+            deployButton1.setEnabled(false);
+            deployButton2.setEnabled(false);
+            deployButton3.setEnabled(false);
+            deployButton4.setEnabled(false);
             stopButton.setEnabled(true);
         } catch (SchedulerException e) {
             showErrorDialog("Scheduler Error", e.getMessage());
@@ -136,36 +167,68 @@ public  class QuartzSchedulerGUI extends JFrame {
 
             }
             startButton.setEnabled(true);
+            deployButton1.setEnabled(true);
+            deployButton2.setEnabled(true);
+            deployButton3.setEnabled(true);
+            deployButton4.setEnabled(true);
             stopButton.setEnabled(false);
+
         } catch (SchedulerException e) {
             showErrorDialog("Scheduler Error", e.getMessage());
         }
     }
 
+    public void deployStart(int app) {
+        startButton.setEnabled(false);
+        stopButton.setEnabled(false);
+        switch (app)
+        {
+            case 1:
+                DeployScheduler.deployManual(BuildConfig.app1,1);
+                break;
+            case 2:
+                DeployScheduler.deployManual(BuildConfig.app2,2);
+                break;
+            case 3:
+                DeployScheduler.deployManual(BuildConfig.app3,3);
+                break;
+            case 4:
+                DeployScheduler.deployManual(BuildConfig.app4,4);
+                break;
+        }
+
+        startButton.setEnabled(true);
+        stopButton.setEnabled(false);
+
+    }
+
     public static void log(String jobName, String message) {
+
         String comp = jobName.replace("_build","");
         JTextArea logTextArea = getLogTextArea(comp);
+        LocalDateTime date =  LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
+        String time = date.format(formatter);
+
         if (logTextArea != null) {
-            System.out.println(jobName+" ===> "+message);
+            message = "["+time+"] "+message;
             logTextArea.append(message + "\n");
-        }else{
-            System.out.println(jobName+" 텍스트 영역없음!!!");
         }
     }
 
     public static void showErrorDialog(String title, String message) {
         JOptionPane.showMessageDialog(panel, message, title, JOptionPane.ERROR_MESSAGE);
     }
-    public static JTextArea getLogTextArea(String projectName) {
+    public  static JTextArea getLogTextArea(String projectName) {
         switch (projectName) {
             case "app1":
-                return QuartzSchedulerGUI.logTextArea1;
+                return QuartzSchedulerGUI.getInstance().logTextArea1;
             case "app2":
-                return QuartzSchedulerGUI.logTextArea2;
+                return QuartzSchedulerGUI.getInstance().logTextArea2;
             case "app3":
-                return QuartzSchedulerGUI.logTextArea3;
+                return QuartzSchedulerGUI.getInstance().logTextArea3;
             case "app4":
-                return QuartzSchedulerGUI.logTextArea4;
+                return QuartzSchedulerGUI.getInstance().logTextArea4;
             default:
                 return null;
         }
@@ -183,21 +246,23 @@ public  class QuartzSchedulerGUI extends JFrame {
         String comp = jobName.replace("_build","");
         switch (comp) {
             case "app1":
-                return QuartzSchedulerGUI.statusLabel1;
+                return QuartzSchedulerGUI.getInstance().statusLabel1;
             case "app2":
-                return QuartzSchedulerGUI.statusLabel2;
+                return QuartzSchedulerGUI.getInstance().statusLabel2;
             case "app3":
-                return QuartzSchedulerGUI.statusLabel3;
+                return QuartzSchedulerGUI.getInstance().statusLabel3;
             case "app4":
-                return QuartzSchedulerGUI.statusLabel4;
+                return QuartzSchedulerGUI.getInstance().statusLabel4;
             default:
                 return null;
         }
     }
-    private static QuartzSchedulerGUI instance;
+
+    public static QuartzSchedulerGUI instance;
 
     public static QuartzSchedulerGUI getInstance() {
         if (instance == null) {
+            System.out.println("QuartzSchedulerGUI없어용");
             instance = new QuartzSchedulerGUI();
         }
         return instance;

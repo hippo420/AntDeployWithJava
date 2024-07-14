@@ -1,0 +1,51 @@
+<project name="app3_build" default="main" basedir="." >
+    <property name="lib.dir" value="D:\DEV\AntDeploy\src\main\resources\lib"/>
+
+    <property name="host" value="192.168.0.7"/>
+    <property name="port" value="22"/>
+    <property name="username" value="jenkins"/>
+    <property name="password" value="1"/>
+    <property name="local.file" value="D:/DEV/changet/src/main/resources/META/code.txt"/>
+    <property name="remote.dir" value="/home/dev"/>
+
+    <!-- Ant-Contrib JAR 파일을 classpath에 추가 -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <fileset dir="${lib.dir}">
+                <include name="ant-contrib-1.0b3.jar"/>
+
+            </fileset>
+        </classpath>
+    </taskdef>
+
+
+
+    <!-- 기본적인 빌드 작업 -->
+    <target name="main">
+
+        <antcall target="MakeDirectory"/>
+        <antcall target="SourceCopy"/>
+        <antcall target="TestComplie"/>
+        <antcall target="Deploy"/>
+    </target>
+
+
+
+    <!-- 예제: if 조건문 사용 -->
+    <target name="MakeDirectory">
+        <echo message="app4 is Making Directory"/>
+    </target>
+
+    <target name="SourceCopy">
+        <echo message="app4 is Copying SourceCode"/>
+    </target>
+
+    <target name="TestComplie">
+        <echo message="app4 is Compiling SourceCode"/>
+    </target>
+
+    <target name="Deploy">
+        <echo message="app4 is Deploying"/>
+    </target>
+
+</project>

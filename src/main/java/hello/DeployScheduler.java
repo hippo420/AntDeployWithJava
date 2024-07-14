@@ -11,14 +11,19 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import static java.rmi.server.LogStream.log;
+
 public class DeployScheduler implements Job {
     private static final Logger logger = LogManager.getLogger(DeployScheduler.class);
 
+    public static JTextArea logTextArea;
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
@@ -58,6 +63,7 @@ public class DeployScheduler implements Job {
         } catch (Exception e) {
             project.fireBuildFinished(e);
             logger.error("Ant build failed", e);
+            QuartzSchedulerGUI.showErrorDialog("Build failed", e.getMessage());
         }finally{
             // 자원 해제
             loggerContext.close();
@@ -68,8 +74,10 @@ public class DeployScheduler implements Job {
     private static class Log4jBuildListener implements BuildListener {
 
         private final Logger logger;
+        private final String JobName;
         public Log4jBuildListener(String loggerName) {
             this.logger = LogManager.getLogger(loggerName);
+            this.JobName = String.valueOf(LogManager.getLogger(loggerName));
         }
 
         @Override
@@ -81,19 +89,25 @@ public class DeployScheduler implements Job {
         public void buildFinished(BuildEvent event) {
             if (event.getException() == null) {
                 logger.info("Build finished successfully");
+                QuartzSchedulerGUI.updateStatus(event.getProject().getName(),"[성공]", Color.GREEN);
+                QuartzSchedulerGUI.log(event.getProject().getName(),"Build finished successfully");
             } else {
                 logger.error("Build finished with errors", event.getException());
+                QuartzSchedulerGUI.updateStatus(event.getProject().getName(),"[실패]", Color.RED);
+                QuartzSchedulerGUI.log(event.getProject().getName(),"Build finished with errors");
             }
         }
 
         @Override
         public void targetStarted(BuildEvent event) {
             logger.info("Target started: " + event.getTarget().getName());
+            QuartzSchedulerGUI.log(event.getProject().getName(),"Target started: " + event.getTarget().getName());
         }
 
         @Override
         public void targetFinished(BuildEvent event) {
             logger.info("Target finished: " + event.getTarget().getName());
+            QuartzSchedulerGUI.log(event.getProject().getName(),"Target finished: " + event.getTarget().getName());
         }
 
         @Override

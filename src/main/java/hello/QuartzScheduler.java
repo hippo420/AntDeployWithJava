@@ -32,13 +32,13 @@ public class QuartzScheduler {
                 path = BuildConfig.app1;
                 break;
             case "biz1" :
-                path = BuildConfig.biz1;
-                break;
-            case "app2" :
                 path = BuildConfig.app2;
                 break;
-            case "biz2" :
-                path = BuildConfig.biz2;
+            case "app3" :
+                path = BuildConfig.app3;
+                break;
+            case "app4" :
+                path = BuildConfig.app4;
                 break;
         }
 
